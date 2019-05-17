@@ -9,6 +9,7 @@ typedef struct node{
 }node;
 
 bool is_empty(node* front);
+node* create_node();
 
 void main(){
     int option = 0;
@@ -29,6 +30,10 @@ void main(){
         switch(option){
             case 0:
               break;
+
+            case 1:
+                printf(is_empty(front) ? "\nThe list is empty!\n" : "\nThe list is not empty!\n");
+                break;
         }
 
     }while(option != 0);
@@ -36,4 +41,18 @@ void main(){
 
 bool is_empty(node* front){
     return front == NULL;
+}
+
+node* create_node(){
+
+    node* new_node = (node*) malloc(sizeof(node));
+
+    if(new_node != NULL){
+        printf("\nInsert your name: ");
+        scanf("%s", new_node->name);
+        new_node->previous = NULL;
+        new_node->next = NULL;
+    }
+
+    return new_node;
 }
