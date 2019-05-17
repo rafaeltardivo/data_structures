@@ -8,6 +8,8 @@ typedef struct node{
     struct node* next;
 }node;
 
+bool is_empty(node* front);
+
 void main(){
     int option = 0;
     node* front = NULL;
@@ -30,4 +32,8 @@ void main(){
         }
 
     }while(option != 0);
+}
+
+bool is_empty(node* front){
+    return front == NULL;
 }
