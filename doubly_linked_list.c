@@ -3,40 +3,97 @@
 #include <stdbool.h>
 
 typedef struct node{
-    char name[20 + 1];
-    struct node* previous;
+    int data;
     struct node* next;
+    struct node* previous;
 }node;
 
+void display_items(node* front, node* rear, bool reverse);
 bool is_empty(node* front);
+bool insert_node(node** front, node** rear);
+bool delete_node(node** front, node** rear);
+bool clear_items(node** front, node** rear);
 node* create_node();
+node* locate_node(node* front, int value);
 
 void main(){
-    int option = 0;
+
+    int op = 0;
     node* front = NULL;
     node* rear = NULL;
 
     do{
         printf(
-            "\nDoubly linked list menu\n"
-            "\n1 - is empty?"
-            "\n2 - insert"
-            "\n3 - delete"
-            "\n4 - list"
-            "\n5 - clear"
-            "\n0 - exit"    
+            "\n\nDoubly likend list MENU\n"
+            "\n1 - Is empty?"    
+            "\n2 - Insert"
+            "\n3 - Delete"
+            "\n4 - List items in order"
+            "\n5 - List items in reverse order"
+            "\n6 - Clear items"
+            "\n0 - EXIT\n"
         );
-        
-        switch(option){
-            case 0:
-              break;
+
+        printf("\nChoose your option: ");
+        scanf("%d", &op);
+
+        switch(op){
 
             case 1:
-                printf(is_empty(front) ? "\nThe list is empty!\n" : "\nThe list is not empty!\n");
+                printf(is_empty(front) ? "\nThe list is empty!" : "\nThe list is not empty!");
+                break;
+
+            case 2:
+                printf(insert_node(&front, &rear) ? "\nValue inserted!" : "\nSomething went wrong!");
+                break;
+
+            case 3:
+                printf(delete_node(&front, &rear) ? "\nValue deleted!" : "\nSomething went wrong!");
+                break;
+
+            case 4:
+                display_items(front, rear, false);
+                break;
+
+            case 5:
+                display_items(front, rear, true);
+                break;
+
+            case 6:
+                printf(clear_items(&front, &rear) ? "\nCleared!" : "\nSomething went wrong!");
+                break;
+            
+            default:
+                printf("\nInvalid option!");
                 break;
         }
 
-    }while(option != 0);
+    }while(op != 0);
+}
+
+void display_items(node* front, node* rear, bool reverse){
+
+    node* temp = NULL;
+
+    if(reverse == false){
+        temp = front;
+
+        printf("\nFRONT ->");
+        while(temp != NULL){
+            printf(" [ %d ] ", temp->data);
+            temp = temp->next;
+        }
+        printf("<- REAR\n");
+    }else{
+        temp = rear;
+
+        printf("\nREAR ->");
+        while(temp != NULL){
+            printf(" [ %d ] ", temp->data);
+            temp = temp->previous;
+        }
+        printf("<- FRONT\n");
+    }
 }
 
 bool is_empty(node* front){
@@ -45,14 +102,137 @@ bool is_empty(node* front){
 
 node* create_node(){
 
-    node* new_node = (node*) malloc(sizeof(node));
+    node* new_node = (node*)malloc(sizeof(node));
 
-    if(new_node != NULL){
-        printf("\nInsert your name: ");
-        scanf("%s", new_node->name);
-        new_node->previous = NULL;
-        new_node->next = NULL;
+    if(new_node == NULL){
+        printf("\nCouldn't allocate memory!");
+        exit(1);
     }
 
+    printf("\nInsert a value: ");
+    scanf("%d", &new_node->data);
+    new_node->next = NULL;
+    new_node->previous = NULL;
+
     return new_node;
+}
+
+node* locate_node(node* front, int value){
+
+    node* temp = front;
+
+    while(temp != NULL){
+        if(temp->data == value){
+            break;
+        }else{
+            temp = temp->next;
+        } 
+    }
+    return temp;
+}
+
+bool insert_node(node** front, node** rear){
+
+    int elem = 0, before_after = 0;
+    node* new_node = create_node();
+    node* temp = NULL;
+    node* aux = NULL;
+
+    if((*front) == NULL){
+        (*front) = (*rear) = new_node;
+    }else{
+        printf("\nChoose an element: ");
+        display_items((*front), (*rear), false);
+        scanf("%d", &elem);
+
+        temp = locate_node((*front), elem);
+        
+        if(temp != NULL){
+            printf("\nInsert 0 to insert before or 1 to insert after: ");
+            scanf("%d", &before_after);
+
+            switch(before_after){
+                case 0:
+                    aux = temp->previous;
+                    temp->previous = new_node;
+                    new_node->next = temp;
+                    new_node->previous = aux;
+
+                    if(temp == (*front))
+                        (*front) = new_node;
+
+                    break;
+
+                case 1:
+                    aux = temp->next;
+                    temp->next = new_node;
+                    new_node->previous = temp;
+                    new_node->next = aux;
+
+                    if(temp == (*rear))
+                        (*rear) = new_node;
+
+                    break;
+
+                default:
+                    printf("\nInvalid option!");
+                    return false;        
+            }
+        }else{
+            printf("\nInvalid option!");
+            return false; 
+        }
+    }
+    return true;
+}
+
+bool delete_node(node** front, node** rear){
+
+    if(is_empty((*front))){
+        return false;
+    }
+
+    int op = 0;
+    node* temp = NULL;
+    node* aux = NULL;
+
+    printf("\nInsert the node you want to delete: ");
+    scanf("%d", &op);
+
+    temp = locate_node((*front), op);
+
+    if(temp != NULL){
+
+        if(temp == (*front)){
+            (*front) = temp->next;
+            (*front)->previous = NULL;
+        }else if (temp == (*rear)){
+            (*rear) = temp->previous;
+            (*rear)->next = NULL;
+        }else{
+            temp->previous->next = temp->next;
+            temp->next->previous = temp->previous;
+        }
+
+        free(temp);
+    }else{
+        printf("\nInvalid option!");
+        return false; 
+    }
+
+    return true;
+}
+
+bool clear_items(node** front, node** rear){
+
+    node* temp = NULL;
+
+    while((*front) != NULL){
+        temp = (*front);
+        free((*front));
+        (*front) = temp->next;
+    }
+    free((*rear));
+
+    return is_empty((*front));
 }
