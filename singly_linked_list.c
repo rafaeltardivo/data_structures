@@ -15,7 +15,7 @@ void display_items(node* front);
 bool delete(node** front, node** rear);
 bool clear_list(node** front, node** rear);
 
-void main(){
+int main(void){
     int option = 0;
     node* front = NULL;
     node* rear = NULL;
@@ -171,27 +171,23 @@ bool insert(node** front, node** rear){
 }
 
 bool delete(node** front, node** rear){
-
     char ra[13 + 1];
     node* temp = NULL;
     node* reference = NULL;
-
     if(is_empty((*front))){
         printf("\nThe list is already empty!\n");
         return false;
     }
-
     display_items((*front));
     printf("\nInsert the ra you want to insert delete: ");
     scanf("%s",ra);
-
     if(strcmp((*front)->ra, ra) == 0){
         reference = (*front)->next;
         free((*front));
         (*front) = reference;
+        if((*front) == NULL) (*rear) = NULL;
     }else{
         temp = (*front);
-
         while(temp->next != NULL){
             if(strcmp(temp->next->ra, ra) == 0){
                 reference = temp;
@@ -199,13 +195,10 @@ bool delete(node** front, node** rear){
             }
             temp = temp->next;
         }
-
         if(reference != NULL){
-
             if(reference->next == (*rear)){
-                (*rear) = reference;    
+                (*rear) = reference;
             }
-
             temp = reference->next->next;
             free(reference->next);
             reference->next = temp;
@@ -215,19 +208,15 @@ bool delete(node** front, node** rear){
         }
     }
     return true;
-
 }
 
 bool clear_list(node ** front, node** rear){
-
     node* temp = NULL;
-
     while((*front) != NULL){
         temp = (*front);
-        free((*front));
         (*front) = temp->next;
+        free(temp);
     }
-    free((*rear));
-
+    (*rear) = NULL;
     return is_empty((*front));
 }

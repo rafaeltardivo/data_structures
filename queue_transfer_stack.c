@@ -20,7 +20,7 @@ void clean_container(node** container);
 node* create_node();
 node* copy_node(node* base);
 
-void main(){
+int main(void){
 
     int opt = 0, value = 0;
     node* first = NULL;
@@ -114,10 +114,9 @@ node* copy_node(node* base){
     return new_node;
 }
 
-
 bool insert(node** first, node** top, node** last){
     node* new_node = create_node();
-
+    if(new_node == NULL) return false;
     if((*top) == NULL){
         if((*last) == NULL){
             (*last) = (*first) = new_node;
@@ -130,6 +129,7 @@ bool insert(node** first, node** top, node** last){
         (*top) = new_node;
         (*top)->next = temp;
     }
+    return true;
 }
 
 void display_elements(node* first, node* top){
@@ -205,17 +205,19 @@ bool transfer(node** first, node** top, node** last){
 
 bool remove_item(node** first, node** last, node** top){
     node* temp = NULL;
-
+    if((*top) == NULL && (*first) == NULL){
+        printf("\nThe container is empty!\n");
+        return false;
+    }
     if((*top) == NULL){
         temp = (*first);
         (*first) = temp->next;
-       
+        if((*first) == NULL) (*last) = NULL;
     }else{
         temp = (*top);
         (*top) = temp->next;
     }
     free(temp);
-   
     return true;
 }
 

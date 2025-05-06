@@ -16,7 +16,7 @@ bool are_column_sums_equal(int square[4][4]);
 bool are_diagonals_equal(int square[4][4]);
 void show_square(int square[4][4]);
 
-void main(){
+int main(void){
     int square[4][4] = {0};
     int line_array[16] = {0};
 
@@ -78,11 +78,9 @@ void turn_into_single(int square[4][4], int linear_array[16]){
 
 */
 void bubble_sort(int linear_array[16]){
-
     int temp = 0;
-
-    for(int i = 0; i < 16; i++){
-        for(int j = 0; j < 16; j++){
+    for(int i = 0; i < 16 - 1; i++){
+        for(int j = 0; j < 16 - 1 - i; j++){
             if(linear_array[j] > linear_array[j+1]){
                 temp = linear_array[j];
                 linear_array[j] = linear_array[j+1];

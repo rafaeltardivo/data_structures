@@ -15,7 +15,7 @@ void display_items(node* front);
 bool delete(node** front, node** rear);
 bool clear_list(node** front, node** rear);
 
-void main(){
+int main(void){
     int option = 0;
     node* front = NULL;
     node* rear = NULL;
@@ -187,23 +187,24 @@ bool delete(node** front, node** rear){
 }
 
 bool clear_list(node** front, node** rear){
-
     if(is_empty((*front))){
         printf("\nThe list is already empty!\n");
         return false;
     }
-
     node* temp = NULL;
     node* initial = (*front);
-
+    if((*front) == (*rear)){
+        free(*front);
+        *front = *rear = NULL;
+        return true;
+    }
     do{
         temp = (*front)->next;
         free((*front));
         (*front) = temp;
-    }while(temp !=  initial);
-    *front = NULL;
-
-    return is_empty((*front));
+    }while((*front) != initial);
+    *front = *rear = NULL;
+    return true;
 }
 
 void display_items(node* front){

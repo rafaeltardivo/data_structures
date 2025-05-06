@@ -19,7 +19,7 @@ void in_order(node* root);
 void post_order(node* root);
 node* clear(node* root);
 
-void main(){
+int main(void){
     int op = 0;
     node* root = NULL;
     int value = 0;
@@ -212,11 +212,10 @@ void post_order(node* root){
 
 node* find_min(node* root){
     node* temp = root;
-
-    while(temp != NULL){
+    if(temp == NULL) return NULL;
+    while(temp->left != NULL){
         temp = temp->left;
     }
-
     return temp;
 }
 

@@ -16,7 +16,7 @@ bool clear_items(node** front, node** rear);
 node* create_node();
 node* locate_node(node* front, int value);
 
-void main(){
+int main(void){
 
     int op = 0;
     node* front = NULL;
@@ -187,7 +187,6 @@ bool insert_node(node** front, node** rear){
 }
 
 bool delete_node(node** front, node** rear){
-
     if(is_empty((*front))){
         return false;
     }
@@ -202,19 +201,23 @@ bool delete_node(node** front, node** rear){
     temp = locate_node((*front), op);
 
     if(temp != NULL){
-
-        if(temp == (*front)){
+        if(temp == (*front) && temp == (*rear)){
+            // Only one node
+            free(temp);
+            (*front) = (*rear) = NULL;
+        }else if(temp == (*front)){
             (*front) = temp->next;
-            (*front)->previous = NULL;
+            if((*front) != NULL) (*front)->previous = NULL;
+            free(temp);
         }else if (temp == (*rear)){
             (*rear) = temp->previous;
-            (*rear)->next = NULL;
+            if((*rear) != NULL) (*rear)->next = NULL;
+            free(temp);
         }else{
             temp->previous->next = temp->next;
             temp->next->previous = temp->previous;
+            free(temp);
         }
-
-        free(temp);
     }else{
         printf("\nInvalid option!");
         return false; 
@@ -224,15 +227,12 @@ bool delete_node(node** front, node** rear){
 }
 
 bool clear_items(node** front, node** rear){
-
     node* temp = NULL;
-
     while((*front) != NULL){
         temp = (*front);
-        free((*front));
         (*front) = temp->next;
+        free(temp);
     }
-    free((*rear));
-
+    (*rear) = NULL;
     return is_empty((*front));
 }

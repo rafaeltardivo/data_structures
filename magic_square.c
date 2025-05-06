@@ -94,7 +94,7 @@ void show_square(int square[4][4]){
     printf("\n\n");
 }   
 
-void main(){
+int main(void){
     int square[4][4] = {0};
 
     // step 1 - get user input

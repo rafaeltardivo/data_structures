@@ -15,7 +15,7 @@ bool show_rear(node_ptr front, node_ptr rear);
 void display_elements(node_ptr front);
 bool clear_queue(node_ptr* front);
 
-void main(){
+int main(void){
     
     int opt = 0, value = 0;
     node_ptr front = NULL;
@@ -113,6 +113,7 @@ bool show_front(node_ptr front){
         return false;
     }
     printf("\n front ->[%d]\n", front->data);
+    return true;
 }
 
 bool show_rear(node_ptr front, node_ptr rear){
@@ -120,8 +121,8 @@ bool show_rear(node_ptr front, node_ptr rear){
         printf("\nThe queue is empty!\n");
         return false;
     }
-
     printf("\n[%d]<- rear \n", rear->data);
+    return true;
 }
 
 void display_elements(node_ptr front){

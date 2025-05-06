@@ -14,7 +14,7 @@ void show_top(node_ptr top);
 void display_elements(node_ptr top);
 bool clear_stack(node_ptr* top);
 
-void main(){
+int main(void){
     int opt = 0, value = 0;
     node_ptr top = NULL;
 
